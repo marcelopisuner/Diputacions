@@ -137,29 +137,28 @@
     placeholder.disabled = true;
     placeholder.selected = true;
     select.appendChild(placeholder);
+    // Populate dropdown from data.js
+    if (window.plotFiles && plotFiles.length) {
+      plotFiles.forEach(file => {
+        const labelBase = file.replace(/^bcn_ef_plot_/, '').replace(/\.png$/, '');
+        const [suffix, prefix] = labelBase.split('_');
+        const val = `${prefix}_${suffix}`;
+        const opt = document.createElement('option');
+        opt.value = file;
+        opt.textContent = val;
+        select.appendChild(opt);
+      });
+    }
 
-    /* Construeix totes les combinacions prefix_sufix, ex.: "1_130" */
-    const vars = [];
-    prefixes.forEach(p => suffixes.forEach(s => vars.push(`${p}_${s}`)));
-
-    /* ------------------------------------------------------------------ */
-
-    /* Omplim el <select> amb totes les opcions */
-    vars.forEach(v => {
-      const opt = document.createElement("option");
-      opt.value = v;
-      opt.textContent = v;
-      select.appendChild(opt);
-    });
 
     /* Funció per actualitzar la imatge mostrada */
     function updateImage(){
-      const val = select.value;
-      if(!val){ return; }
-      const [prefix, suffix] = val.split("_");
-      const fileName = `Barcelona/Eco-func/bcn_ef_plot_${suffix}_${prefix}.png`;
-      img.src = fileName;
-      img.alt = `Gràfic ${val}`;
+      const file = select.value;
+      if (!file) return;
+      img.src = `Barcelona/Eco-func/${file}`;
+      const labelBase = file.replace(/^bcn_ef_plot_/, '').replace(/\.png$/, '');
+      const [suffix, prefix] = labelBase.split('_');
+      img.alt = `Gràfic ${prefix}_${suffix}`;
       img.style.display = 'block';
     }
 
@@ -173,28 +172,30 @@
       select.click();
     });
 
-    /* Build gallery grid from available variables */
-    const gallery = document.getElementById("gallery");
-    const ul = document.createElement("ul");
+    /* Build gallery grid from data.js */
+    const gallery = document.getElementById('gallery');
+    const ul = document.createElement('ul');
     gallery.appendChild(ul);
-    vars.forEach(v => {
-      const [prefix, suffix] = v.split("_");
-      const display = `${prefix}_${suffix}`;
-      const file = `bcn_ef_plot_${suffix}_${prefix}.png`;
-      const li = document.createElement("li");
-      const a = document.createElement("a");
-      a.href = '#';
-      a.textContent = display;
-      a.onclick = (e) => {
-        e.preventDefault();
-        img.src = `Barcelona/Eco-func/${file}`;
-        img.alt = `Gràfic ${display}`;
-        img.style.display = 'block';
-        select.value = v;
-      };
-      li.appendChild(a);
-      ul.appendChild(li);
-    });
+    if (window.plotFiles && plotFiles.length) {
+      plotFiles.forEach(file => {
+        const labelBase = file.replace(/^bcn_ef_plot_/, '').replace(/\.png$/, '');
+        const [suffix, prefix] = labelBase.split('_');
+        const display = `${prefix}_${suffix}`;
+        const li = document.createElement('li');
+        const a = document.createElement('a');
+        a.href = '#';
+        a.textContent = display;
+        a.onclick = (e) => {
+          e.preventDefault();
+          img.src = `Barcelona/Eco-func/${file}`;
+          img.alt = `Gràfic ${display}`;
+          img.style.display = 'block';
+          select.value = file;
+        };
+        li.appendChild(a);
+        ul.appendChild(li);
+      });
+    }
   </script>
 </body>
 </html>
