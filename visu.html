@@ -156,7 +156,7 @@
       const val = select.value;
       if(!val){ return; }
       const [prefix, suffix] = val.split("_");
-      const fileName = `Barcelona/Eco-func/plot_${suffix}_${prefix}.png`;
+      const fileName = `Barcelona/Eco-func/bcn_ef_plot_${suffix}_${prefix}.png`;
       img.src = fileName;
       img.alt = `Gràfic ${val}`;
       img.style.display = 'block';
@@ -177,7 +177,7 @@
     const ul = document.createElement("ul");
     gallery.appendChild(ul);
     plotFiles.forEach(file => {
-      const labelBase = file.replace(/^plot_/, '').replace(/\.png$/, '');
+      const labelBase = file.replace(/^bcn_ef_plot_/, '').replace(/\.png$/, '');
       const [suffix, prefix] = labelBase.split('_');
       const display = `${prefix}_${suffix}`;
       const li = document.createElement('li');
