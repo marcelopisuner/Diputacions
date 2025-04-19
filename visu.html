@@ -138,7 +138,7 @@
     placeholder.selected = true;
     select.appendChild(placeholder);
     // Populate dropdown from data.js
-    if (window.plotFiles && plotFiles.length) {
+    if (typeof plotFiles !== 'undefined' && plotFiles.length) {
       plotFiles.forEach(file => {
         const labelBase = file.replace(/^bcn_ef_plot_/, '').replace(/\.png$/, '');
         const [suffix, prefix] = labelBase.split('_');
@@ -176,7 +176,7 @@
     const gallery = document.getElementById('gallery');
     const ul = document.createElement('ul');
     gallery.appendChild(ul);
-    if (window.plotFiles && plotFiles.length) {
+    if (typeof plotFiles !== 'undefined' && plotFiles.length) {
       plotFiles.forEach(file => {
         const labelBase = file.replace(/^bcn_ef_plot_/, '').replace(/\.png$/, '');
         const [suffix, prefix] = labelBase.split('_');
