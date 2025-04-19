@@ -107,7 +107,7 @@ for(var in unique_vars) {
   # Save the plot with a file name based on the Expenditure_Area
   ggsave(
     filename = paste0(
-      "plot_",
+      "bcn_ef_plot_",
       str_replace(var, "^(\\d)_(\\d{3})$", "\\2_\\1"),
       ".png"
     ),
@@ -119,7 +119,7 @@ for(var in unique_vars) {
 
 # ------------------------------------------------------------------
 # Generate data.js with the list of all plot PNG filenames
-png_files <- list.files(path = getwd(), pattern = "^plot_.*\\.png$", full.names = FALSE)
+png_files <- list.files(path = getwd(), pattern = "^bcn_ef_plot_.*\\.png$", full.names = FALSE)
 plotFiles_js <- paste0(
   "const plotFiles = [",
   paste(sprintf('\"%s\"', png_files), collapse = ", "),
