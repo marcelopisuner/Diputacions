@@ -105,7 +105,7 @@
   <div id="gallery"></div>
   
   <footer>
-    Fes servir el desplegable per canviar de gràfic. Els fitxers <code>.png</code> han d'estar a la mateixa carpeta que aquest HTML.
+    Fes servir el desplegable per canviar de gràfic. Els fitxers <code>.png</code> han d'estar a la carpeta <code>Barcelona/Eco-func</code>.
   </footer>
 
   <script>
@@ -156,7 +156,7 @@
       const val = select.value;
       if(!val){ return; }
       const [prefix, suffix] = val.split("_");
-      const fileName = `plot_${suffix}_${prefix}.png`;
+      const fileName = `Barcelona/Eco-func/plot_${suffix}_${prefix}.png`;
       img.src = fileName;
       img.alt = `Gràfic ${val}`;
       img.style.display = 'block';
@@ -186,7 +186,7 @@
       a.textContent = display;
       a.onclick = (e) => {
         e.preventDefault();
-        img.src = file;
+        img.src = `Barcelona/Eco-func/${file}`;
         img.alt = `Gràfic ${display}`;
         img.style.display = 'block';
       };
