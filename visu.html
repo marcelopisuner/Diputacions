@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8" />
+  <title>Evolució de la despesa – Visualització interactiva</title>
+  <style>
+    body{
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      margin: 2rem;
+      background:#fafafa;
+      color:#222;
+    }
+    h1{
+      text-align:center;
+      margin-bottom:1.5rem;
+    }
+    select{
+      padding:0.4rem 0.6rem;
+      font-size:1rem;
+    }
+    #plotImage{
+      display:none;
+      margin:0 auto;
+      max-width:90%;
+      height:auto;
+      border:1px solid #ccc;
+      box-shadow:0 2px 4px rgba(0,0,0,.1);
+      background:white;
+    }
+    footer{
+      text-align:center;
+      margin-top:2rem;
+      font-size:0.85rem;
+      color:#666;
+    }
+
+  /* Layout for controls */
+  #controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  /* Styled dropdown */
+  select#plotSelect {
+    padding: 0.5rem 0.75rem;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+    transition: border-color 0.2s;
+  }
+  select#plotSelect:focus {
+    outline: none;
+    border-color: #007BFF;
+  }
+
+  /* Rounded main image */
+  #plotImage {
+    border-radius: 4px;
+  }
+
+  /* Gallery layout */
+  #gallery ul {
+    display: flex;
+    flex-wrap: wrap;
+    list-style: none;
+    padding: 0;
+    margin-top: 1.5rem;
+    gap: 1rem;
+    justify-content: center;
+  }
+  #gallery li {
+    margin: 0;
+  }
+  /* Gallery links as buttons */
+  #gallery li a {
+    display: block;
+    padding: 0.5rem 0.75rem;
+    text-decoration: none;
+    color: #007BFF;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    transition: background-color 0.2s, border-color 0.2s, transform 0.2s;
+  }
+  #gallery li a:hover {
+    background-color: #f0f0f0;
+    border-color: #ccc;
+    transform: translateY(-2px);
+  }
+  </style>
+  <script src="data.js"></script>
+</head>
+<body>
+  <h1>Evolució de la despesa</h1>
+  <div id="controls">
+    <label for="plotSelect">Tria gràfic:</label>
+    <select id="plotSelect"></select>
+  </div>
+
+  <img id="plotImage" alt="Gràfic de despesa" src="" />
+  <!-- Gallery of all available plots -->
+  <div id="gallery"></div>
+  
+  <footer>
+    Fes servir el desplegable per canviar de gràfic. Els fitxers <code>.png</code> han d'estar a la mateixa carpeta que aquest HTML.
+  </footer>
+
+  <script>
+    /* ------------------------------------------------------------------
+       CONFIGURACIÓ
+       ------------------------------------------------------------------
+       – La convenció de noms de fitxer és:
+         plot_<SUFIX>_<PREFIX>.png   (p.ex. plot_130_1.png)
+       – PREFIXOS obligatoris: 1‑4 i 6‑9
+       – SUFIXOS: els mateixos que existeixen al vostre conjunt de dades.
+       Afegiu tots els sufixos presents al vostre projecte a l'array `suffixes`
+       ------------------------------------------------------------------ */
+    const prefixes = ["1","2","3","4","6","7","8","9"];
+
+    /*  TODO: afegiu aquí tots els sufixos detectats als vostres fitxers       *
+     *  Exemple: ["130","210","310","490"]                                      */
+    const suffixes = [
+      "130" /* , "210", "310", ... */
+    ];
+    /* ------------------------------------------------------------------ */
+
+    const select = document.getElementById("plotSelect");
+    const img    = document.getElementById("plotImage");
+
+    // Add placeholder option so no image shows until user selects
+    const placeholder = document.createElement("option");
+    placeholder.textContent = "Tria un gràfic...";
+    placeholder.disabled = true;
+    placeholder.selected = true;
+    select.appendChild(placeholder);
+
+    /* Construeix totes les combinacions prefix_sufix, ex.: "1_130" */
+    const vars = [];
+    prefixes.forEach(p => suffixes.forEach(s => vars.push(`${p}_${s}`)));
+
+    /* ------------------------------------------------------------------ */
+
+    /* Omplim el <select> amb totes les opcions */
+    vars.forEach(v => {
+      const opt = document.createElement("option");
+      opt.value = v;
+      opt.textContent = v;
+      select.appendChild(opt);
+    });
+
+    /* Funció per actualitzar la imatge mostrada */
+    function updateImage(){
+      const val = select.value;
+      if(!val){ return; }
+      const [prefix, suffix] = val.split("_");
+      const fileName = `plot_${suffix}_${prefix}.png`;
+      img.src = fileName;
+      img.alt = `Gràfic ${val}`;
+      img.style.display = 'block';
+    }
+
+    /* Actualitza la imatge quan canvia la selecció */
+    select.addEventListener("change", updateImage);
+
+    // Open dropdown when the label is clicked
+    const label = document.querySelector('label[for="plotSelect"]');
+    label.addEventListener("click", () => {
+      select.focus();
+      select.click();
+    });
+
+    /* Build list of clickable plot names */
+    const gallery = document.getElementById("gallery");
+    const ul = document.createElement("ul");
+    gallery.appendChild(ul);
+    plotFiles.forEach(file => {
+      const labelBase = file.replace(/^plot_/, '').replace(/\.png$/, '');
+      const [suffix, prefix] = labelBase.split('_');
+      const display = `${prefix}_${suffix}`;
+      const li = document.createElement('li');
+      const a = document.createElement('a');
+      a.href = '#';
+      a.textContent = display;
+      a.onclick = (e) => {
+        e.preventDefault();
+        img.src = file;
+        img.alt = `Gràfic ${display}`;
+        img.style.display = 'block';
+      };
+      li.appendChild(a);
+      ul.appendChild(li);
+    });
+  </script>
+</body>
+</html>
