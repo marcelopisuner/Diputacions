@@ -173,16 +173,16 @@
       select.click();
     });
 
-    /* Build list of clickable plot names */
+    /* Build gallery grid from available variables */
     const gallery = document.getElementById("gallery");
     const ul = document.createElement("ul");
     gallery.appendChild(ul);
-    plotFiles.forEach(file => {
-      const labelBase = file.replace(/^bcn_ef_plot_/, '').replace(/\.png$/, '');
-      const [suffix, prefix] = labelBase.split('_');
+    vars.forEach(v => {
+      const [prefix, suffix] = v.split("_");
       const display = `${prefix}_${suffix}`;
-      const li = document.createElement('li');
-      const a = document.createElement('a');
+      const file = `bcn_ef_plot_${suffix}_${prefix}.png`;
+      const li = document.createElement("li");
+      const a = document.createElement("a");
       a.href = '#';
       a.textContent = display;
       a.onclick = (e) => {
@@ -190,6 +190,7 @@
         img.src = `Barcelona/Eco-func/${file}`;
         img.alt = `Gràfic ${display}`;
         img.style.display = 'block';
+        select.value = v;
       };
       li.appendChild(a);
       ul.appendChild(li);
