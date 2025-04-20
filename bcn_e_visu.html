@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Clasificación Económica de Gastos (Filtro Concepto)</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      margin: 2em;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 2em;
+    }
+    thead th {
+      background: #f0f0f0;
+      border-bottom: 2px solid #333;
+      padding: 0.5em;
+      text-align: left;
+    }
+    tbody td {
+      border-bottom: 1px solid #ccc;
+      padding: 0.4em 0.5em;
+    }
+    a {
+      color: #0066cc;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Clasificación Económica de Gastos</h1>
+  <p>Se muestran únicamente los registros cuyo <em>Concepto</em> es un número de hasta tres dígitos (sin decimales).</p>
+  <table id="classified">
+    <thead>
+      <tr>
+        <th>Capítulo</th>
+        <th>Artículo</th>
+        <th>Concepto</th>
+        <th>Denominación</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Filas inyectadas vía JS -->
+    </tbody>
+  </table>
+
+  <script>
+    // Tabla económica
+    const data = [
+      {cap:"1", art:"10", conc:"100",   denom:"Retribuciones básicas y otras remuneraciones de los miembros de los órganos de gobierno."},
+      {cap:"1", art:"10", conc:"101",   denom:"Retribuciones básicas y otras remuneraciones del personal directivo."},
+      {cap:"1", art:"10", conc:"107",   denom:"Contribuciones a planes y fondos de pensiones."},
+      {cap:"1", art:"11", conc:"110",   denom:"Retribuciones básicas y otras remuneraciones de personal eventual."},
+      {cap:"1", art:"11", conc:"117",   denom:"Contribuciones a planes y fondos de pensiones."},
+      {cap:"1", art:"12", conc:"120",   denom:"Retribuciones básicas."},
+      {cap:"1", art:"12", conc:"121",   denom:"Retribuciones complementarias."},
+      {cap:"1", art:"12", conc:"122",   denom:"Retribuciones en especie."},
+      {cap:"1", art:"12", conc:"124",   denom:"Retribuciones de funcionarios en prácticas."},
+      {cap:"1", art:"12", conc:"127",   denom:"Contribuciones a planes y fondos de pensiones."},
+      {cap:"1", art:"13", conc:"130",   denom:"Laboral Fijo."},
+      {cap:"1", art:"13", conc:"131",   denom:"Laboral temporal."},
+      {cap:"1", art:"13", conc:"132",   denom:"Retribuciones en especie."},
+      {cap:"1", art:"13", conc:"137",   denom:"Contribuciones a planes y fondos de pensiones."},
+      {cap:"1", art:"14", conc:"143",   denom:"Otro personal."},
+      {cap:"1", art:"14", conc:"147",   denom:"Contribuciones a planes y fondos de pensiones."},
+      {cap:"1", art:"15", conc:"150",   denom:"Productividad."},
+      {cap:"1", art:"15", conc:"151",   denom:"Gratificaciones."},
+      {cap:"1", art:"15", conc:"152",   denom:"Otros incentivos al rendimiento."},
+      {cap:"1", art:"15", conc:"153",   denom:"Complemento de dedicación especial."},
+      {cap:"1", art:"16", conc:"160",   denom:"Cuotas sociales."},
+      {cap:"1", art:"16", conc:"161",   denom:"Prestaciones sociales."},
+      {cap:"1", art:"16", conc:"162",   denom:"Gastos sociales del personal."},
+      {cap:"1", art:"16", conc:"164",   denom:"Complemento familiar."},
+      // … registros de Capítulos 2 a 9, solo con 'conc' de hasta 3 dígitos …
+    ];
+
+    function buildTable() {
+      const tbody = document.querySelector('#classified tbody');
+
+      // Filtrar solo conceptos sin punto ni decimales
+      const filtered = data.filter(item => /^\d{1,3}$/.test(item.conc));
+
+      filtered.forEach(item => {
+        const tr = document.createElement('tr');
+
+        // Capítulo, Artículo y Concepto como enlaces
+        ['cap','art','conc'].forEach(field => {
+          const td = document.createElement('td');
+          const a  = document.createElement('a');
+          a.href        = '#' + item[field];
+          a.textContent = item[field];
+          td.appendChild(a);
+          tr.appendChild(td);
+        });
+
+        // Denominación
+        const tdDen = document.createElement('td');
+        tdDen.textContent = item.denom;
+        tr.appendChild(tdDen);
+
+        tbody.appendChild(tr);
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', buildTable);
+  </script>
+
+</body>
+</html>
