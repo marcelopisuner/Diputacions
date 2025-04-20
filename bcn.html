@@ -36,13 +36,14 @@
       align-items: center;
       padding: 40px 20px;
       background: var(--primary-color);
+      overflow-x: auto;
     }
     .cards-container {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
       gap: 30px;
       padding: 0 2rem;
-      justify-items: start;
     }
     .card {
       position: relative;
@@ -92,10 +93,6 @@
         max-width: 300px;
       }
     }
-    .cards-container .card:nth-child(4n+3),
-    .cards-container .card:nth-child(4n+4) {
-      justify-self: end;
-    }
   </style>
 </head>
 <body>
@@ -108,5 +105,17 @@
       <div class="card"><a href="bcn_ef_visu.html">Classificació Econòmico funcional</a></div>
     </div>
   </main>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const container = document.querySelector('.cards-container');
+      const cards = container.querySelectorAll('.card');
+      const gap = 30; // matches CSS gap
+      if (cards.length > 0) {
+        const cardWidth = cards[0].getBoundingClientRect().width;
+        const totalWidth = cards.length * cardWidth + (cards.length - 1) * gap;
+        container.style.width = totalWidth + 'px';
+      }
+    });
+  </script>
 </body>
 </html>
