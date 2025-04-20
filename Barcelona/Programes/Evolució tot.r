@@ -11,7 +11,7 @@ library(scales)
 setwd('/Users/marceloppisuner/Documents/GitHub/Diputacions/Barcelona/Programes')
 
 # Define file path
-file_paths <- list.files(path = "/Users/marcelopisuner/Documents/b) Trabajo/Fundació Pi i Sunyer/Dades/3.Dades diputacions/1.Evolució de la despesa/Programes/_Evolució ProgramesTot", 
+file_paths <- list.files(path = "/Users/marceloppisuner/Documents/b) Trabajo/Fundació Pi i Sunyer/Dades/3.Dades diputacions/1.Evolució de la despesa/Programes/_Evolució ProgramesTot", 
                          pattern = "*.csv", full.names = TRUE)
 
 # Function to read and process each CSV without changing the original variable names
@@ -76,8 +76,10 @@ for(var in unique_vars) {
   ggsave(filename = paste0("bcn_p_plot_", number, ".png"), plot = p, width = 8, height = 6)
 }
 
+
+
 # Define file path for the new folder (_Evolució Grups)
-file_paths <- list.files(path = "/Users/marcelopisuner/Documents/b) Trabajo/Fundació Pi i Sunyer/Dades/3.Dades diputacions/1.Evolució de la despesa/Programes/_Evolució Grups", 
+file_paths <- list.files(path = "/Users/marceloppisuner/Documents/b) Trabajo/Fundació Pi i Sunyer/Dades/3.Dades diputacions/1.Evolució de la despesa/Programes/_Evolució Grups", 
                          pattern = "*.csv", full.names = TRUE)
 
 # Function to read and process each CSV without changing the original variable names
