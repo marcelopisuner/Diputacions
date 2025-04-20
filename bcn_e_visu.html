@@ -322,8 +322,9 @@
     document.querySelectorAll('#classified tr').forEach(function(tr) {
       tr.style.cursor = 'pointer';
       tr.addEventListener('click', function(event) {
-        var code = this.cells[0].textContent.trim();
-        var rect = this.getBoundingClientRect();
+        var code = tr.cells[0].textContent.trim();
+        tr.classList.add('level-' + code.length);
+        var rect = tr.getBoundingClientRect();
         // Set up the overlay image
         overlayImg.src = 'Barcelona/Eco/bcn_e_plot_' + code + '.png';
         overlayImg.alt = 'Plot for ' + code;
