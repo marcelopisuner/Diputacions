@@ -1,201 +1,347 @@
 <!DOCTYPE html>
-<html lang="ca">
+<html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <title>Evolució de la despesa – Visualització interactiva</title>
+  <meta charset="UTF-8">
+  <title>Clasificación Económica de Gastos (Filtro Concepto)</title>
   <style>
-    body{
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      margin: 2rem;
-      background:#fafafa;
-      color:#222;
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+    
+    :root {
+      --bg-color: #f5f7fa;
+      --card-bg: #ffffff;
+      --primary-color: #4a90e2;
+      --text-color: #333333;
+      --header-bg: #e2e8f0;
+      --hover-bg: #f1f5f9;
+      --border-color: #e2e8f0;
+      --shadow: rgba(0, 0, 0, 0.05);
     }
-    h1{
-      text-align:center;
-      margin-bottom:1.5rem;
+    
+    body {
+      font-family: 'Roboto', sans-serif;
+      background-color: var(--bg-color);
+      margin: 0;
+      padding: 2em;
+      color: var(--text-color);
     }
-    select{
-      padding:0.4rem 0.6rem;
-      font-size:1rem;
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background-color: var(--card-bg);
+      padding: 2em;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px var(--shadow);
     }
-    #plotImage{
-      display:none;
-      margin:0 auto;
-      max-width:90%;
-      height:auto;
-      border:1px solid #ccc;
-      box-shadow:0 2px 4px rgba(0,0,0,.1);
-      background:white;
+    
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 0.5em;
+      color: black;
     }
-    footer{
-      text-align:center;
-      margin-top:2rem;
-      font-size:0.85rem;
-      color:#666;
+    
+    p {
+      font-size: 1rem;
+      margin-bottom: 1.5em;
     }
-
-  /* Layout for controls */
-  #controls {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 0.5rem;
-    margin-bottom: 1.5rem;
-  }
-
-  /* Styled dropdown */
-  select#plotSelect {
-    padding: 0.5rem 0.75rem;
-    font-size: 1rem;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    background-color: #fff;
-    transition: border-color 0.2s;
-  }
-  select#plotSelect:focus {
-    outline: none;
-    border-color: #007BFF;
-  }
-
-  /* Rounded main image */
-  #plotImage {
-    border-radius: 4px;
-  }
-
-  /* Gallery grid layout: 4 items per row */
-  #gallery ul {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 1rem;
-    list-style: none;
-    padding: 0;
-    margin-top: 1.5rem;
-  }
-  #gallery li {
-    margin: 0;
-  }
-  #gallery li a {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 150px;
-    text-decoration: none;
-    font-size: 1.1rem;
-    background-color: #007BFF;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    transition: background-color 0.2s, transform 0.2s;
-  }
-  #gallery li a:hover {
-    background-color: #0056b3;
-    transform: translateY(-4px);
-  }
-  </style>
-  <script src="data.js"></script>
+    
+    /* Table styling — structure remains unchanged */
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      background-color: var(--card-bg);
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px var(--shadow);
+      margin-bottom: 2em;
+    }
+    
+    thead th {
+      background-color: var(--header-bg);
+      color: var(--text-color);
+      font-weight: 500;
+      padding: 0.75em 1em;
+      text-align: left;
+      border-bottom: 2px solid var(--border-color);
+    }
+    
+    tbody tr {
+      transition: background-color 0.2s ease;
+    }
+    tbody tr:hover {
+      background-color: var(--hover-bg);
+    }
+    
+    tbody td {
+      padding: 0.75em 1em;
+      border-bottom: 1px solid var(--border-color);
+    }
+    
+    a {
+      color: var(--primary-color);
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    
+    /* Overlay styling unchanged */
+    #overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.8);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      overflow: auto;
+    }
+    #overlay img {
+      max-width: 90%;
+      max-height: 90%;
+      transform: scale(0);
+      transition: transform 0.3s ease;
+    }
+    #overlay.show img {
+      transform: scale(1);
+    }
+    /* Subcategory selection panel */
+    #subSelection {
+      position: fixed;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: var(--card-bg);
+      border-radius: 8px;
+      box-shadow: 0 4px 12px var(--shadow);
+      padding: 1em;
+      display: none;
+      z-index: 1001;
+      text-align: center;
+    }
+    #subSelection button {
+      margin: 0.5em;
+      padding: 0.5em 1em;
+      border: 1px solid var(--primary-color);
+      background: none;
+      cursor: pointer;
+      font-size: 1em;
+    }
+    #subSelection button:hover {
+      background-color: var(--hover-bg);
+    }
+    
+    /* Preserve your hierarchy levels */
+    .level-1 td {
+      font-family: serif;
+      font-weight: bold;
+      font-size: 1.2em;
+      background-color: #f9f9f9;
+    }
+    .level-2 td {
+      font-family: sans-serif;
+      font-weight: 600;
+      padding-left: 1.5em;
+      font-size: 1em;
+    }
+    .level-3 td {
+      font-family: sans-serif;
+      font-weight: normal;
+      padding-left: 3em;
+      font-size: 0.95em;
+      font-style: italic;
+    }
+    </style>
 </head>
 <body>
-  <h1>Evolució de la despesa</h1>
-  <div id="controls">
-    <label for="plotSelect">Tria gràfic:</label>
-    <select id="plotSelect"></select>
+
+  <h1>Clasificación Programática de Gastos</h1>
+  <p>Se muestran únicamente los registros cuyo <em>Concepto</em> es un número de hasta tres dígitos (sin decimales).</p>
+  <table id="classified">
+    <tbody>
+      <table id="classified">
+        <thead>
+          <tr>
+            <th>Capítulo</th>
+            <th>Denominación</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td><strong>SERVICIOS PÚBLICOS BÁSICOS.</strong></td></tr>
+          <tr><td>13</td><td>Seguridad y movilidad ciudadana.</td></tr>
+          <tr><td>130</td><td>Administración general de la seguridad y protección civil.</td></tr>
+          <tr><td>132</td><td>Seguridad y Orden Público.</td></tr>
+          <tr><td>133</td><td>Ordenación del tráfico y del estacionamiento.</td></tr>
+          <tr><td>134</td><td>Movilidad urbana.</td></tr>
+          <tr><td>135</td><td>Protección civil.</td></tr>
+          <tr><td>136</td><td>Servicio de prevención y extinción de incendios.</td></tr>
+          <tr><td>15</td><td>Vivienda y urbanismo.</td></tr>
+          <tr><td>150</td><td>Administración General de Vivienda y urbanismo.</td></tr>
+          <tr><td>151</td><td>Urbanismo: planeamiento, gestión, ejecución y disciplina urbanística.</td></tr>
+          <tr><td>152</td><td>Vivienda.</td></tr>
+          <tr><td>153</td><td>Vías públicas.</td></tr>
+          <tr><td>16</td><td>Bienestar comunitario.</td></tr>
+          <tr><td>160</td><td>Alcantarillado.</td></tr>
+          <tr><td>161</td><td>Abastecimiento domiciliario de agua potable.</td></tr>
+          <tr><td>162</td><td>Recogida, gestión y tratamiento de residuos.</td></tr>
+          <tr><td>163</td><td>Limpieza viaria.</td></tr>
+          <tr><td>164</td><td>Cementerio y servicios funerarios.</td></tr>
+          <tr><td>165</td><td>Alumbrado público.</td></tr>
+          <tr><td>17</td><td>Medio ambiente.</td></tr>
+          <tr><td>170</td><td>Administración general del medio ambiente.</td></tr>
+          <tr><td>171</td><td>Parques y jardines.</td></tr>
+          <tr><td>172</td><td>Protección y mejora del medio ambiente.</td></tr>
+          <tr><td>2</td><td><strong>ACTUACIONES DE PROTECCIÓN Y PROMOCIÓN SOCIAL.</strong></td></tr>
+          <tr><td>21</td><td>Pensiones.</td></tr>
+          <tr><td>211</td><td>Pensiones.</td></tr>
+          <tr><td>22</td><td>Otras prestaciones económicas a favor de empleados.</td></tr>
+          <tr><td>221</td><td>Otras prestaciones económicas a favor de empleados.</td></tr>
+          <tr><td>23</td><td>Servicios Sociales y promoción social.</td></tr>
+          <tr><td>231</td><td>Asistencia social primaria.</td></tr>
+          <tr><td>24</td><td>Fomento del Empleo.</td></tr>
+          <tr><td>241</td><td>Fomento del Empleo.</td></tr>
+          <tr><td>3</td><td><strong>PRODUCCIÓN DE BIENES PÚBLICOS DE CARÁCTER PREFERENTE.</strong></td></tr>
+          <tr><td>31</td><td>Sanidad.</td></tr>
+          <tr><td>311</td><td>Protección de la salubridad pública.</td></tr>
+          <tr><td>312</td><td>Hospitales, servicios asistenciales y centros de salud.</td></tr>
+          <tr><td>32</td><td>Educación.</td></tr>
+          <tr><td>320</td><td>Administración general de educación.</td></tr>
+          <tr><td>321</td><td>Creación de Centros docentes de enseñanza preescolar y primaria.</td></tr>
+          <tr><td>322</td><td>Creación de Centros docentes de enseñanza secundaria.</td></tr>
+          <tr><td>323</td><td>Funcionamiento de centros docentes de enseñanza preescolar y primaria y educación especial.</td></tr>
+          <tr><td>324</td><td>Funcionamiento de centros docentes de enseñanza secundaria.</td></tr>
+          <tr><td>325</td><td>Vigilancia del cumplimiento de la escolaridad obligatoria.</td></tr>
+          <tr><td>326</td><td>Servicios complementarios de educación.</td></tr>
+          <tr><td>327</td><td>Fomento de la convivencia ciudadana.</td></tr>
+          <tr><td>33</td><td>Cultura.</td></tr>
+          <tr><td>330</td><td>Administración general de cultura.</td></tr>
+          <tr><td>332</td><td>Bibliotecas y Archivos.</td></tr>
+          <tr><td>333</td><td>Equipamientos culturales y museos.</td></tr>
+          <tr><td>334</td><td>Promoción cultural.</td></tr>
+          <tr><td>336</td><td>Protección y gestión del Patrimonio Histórico-Artístico.</td></tr>
+          <tr><td>337</td><td>Instalaciones de ocupación del tiempo libre.</td></tr>
+          <tr><td>338</td><td>Fiestas populares y festejos.</td></tr>
+          <tr><td>34</td><td>Deporte.</td></tr>
+          <tr><td>340</td><td>Administración general de deportes.</td></tr>
+          <tr><td>341</td><td>Promoción y fomento del deporte.</td></tr>
+          <tr><td>342</td><td>Instalaciones deportivas.</td></tr>
+          <tr><td>4</td><td><strong>ACTUACIONES DE CARÁCTER ECONÓMICO.</strong></td></tr>
+          <tr><td>41</td><td>Agricultura, Ganadería y Pesca.</td></tr>
+          <tr><td>410</td><td>Administración general de agricultura, ganadería y pesca.</td></tr>
+          <tr><td>412</td><td>Mejora de las estructuras agropecuarias y de los sistemas productivos.</td></tr>
+          <tr><td>414</td><td>Desarrollo rural.</td></tr>
+          <tr><td>415</td><td>Protección y desarrollo de los recursos pesqueros.</td></tr>
+          <tr><td>419</td><td>Otras actuaciones en agricultura, ganadería y pesca.</td></tr>
+          <tr><td>42</td><td>Industria y energía.</td></tr>
+          <tr><td>420</td><td>Administración General de Industria y energía.</td></tr>
+          <tr><td>422</td><td>Industria.</td></tr>
+          <tr><td>423</td><td>Minería.</td></tr>
+          <tr><td>425</td><td>Energía.</td></tr>
+          <tr><td>43</td><td>Comercio, turismo y pequeñas y medianas empresas.</td></tr>
+          <tr><td>430</td><td>Administración general de comercio, turismo y pequeñas y medianas empresas.</td></tr>
+          <tr><td>431</td><td>Comercio.</td></tr>
+          <tr><td>432</td><td>Información y promoción turística.</td></tr>
+          <tr><td>433</td><td>Desarrollo empresarial.</td></tr>
+          <tr><td>439</td><td>Otras actuaciones sectoriales.</td></tr>
+          <tr><td>44</td><td>Transporte público.</td></tr>
+          <tr><td>440</td><td>Administración general del transporte.</td></tr>
+          <tr><td>441</td><td>Transporte de viajeros.</td></tr>
+          <tr><td>442</td><td>Infraestructuras del transporte.</td></tr>
+          <tr><td>443</td><td>Transporte de mercancías.</td></tr>
+          <tr><td>45</td><td>Infraestructuras.</td></tr>
+          <tr><td>450</td><td>Administración general de infraestructuras.</td></tr>
+          <tr><td>452</td><td>Recursos Hidráulicos.</td></tr>
+          <tr><td>453</td><td>Carreteras.</td></tr>
+          <tr><td>454</td><td>Caminos vecinales.</td></tr>
+          <tr><td>459</td><td>Otras infraestructuras.</td></tr>
+          <tr><td>46</td><td>Investigación, desarrollo e innovación.</td></tr>
+          <tr><td>462</td><td>Investigación y estudios relacionados con los servicios públicos.</td></tr>
+          <tr><td>463</td><td>Investigación científica, técnica y aplicada.</td></tr>
+          <tr><td>49</td><td>Otras actuaciones de carácter económico.</td></tr>
+          <tr><td>491</td><td>Sociedad de la información.</td></tr>
+          <tr><td>492</td><td>Gestión del conocimiento.</td></tr>
+          <tr><td>493</td><td>Protección de consumidores y usuarios.</td></tr>
+          <tr><td>9</td><td><strong>ACTUACIONES DE CARÁCTER GENERAL.</strong></td></tr>
+          <tr><td>91</td><td>Órganos de gobierno.</td></tr>
+          <tr><td>912</td><td>Órganos de gobierno.</td></tr>
+          <tr><td>92</td><td>Servicios de carácter general.</td></tr>
+          <tr><td>920</td><td>Administración General.</td></tr>
+          <tr><td>922</td><td>Coordinación y organización institucional de las entidades locales.</td></tr>
+          <tr><td>923</td><td>Información básica y estadística.</td></tr>
+          <tr><td>924</td><td>Participación ciudadana.</td></tr>
+          <tr><td>925</td><td>Atención a los ciudadanos.</td></tr>
+          <tr><td>926</td><td>Comunicaciones internas.</td></tr>
+          <tr><td>929</td><td>Imprevistos, situaciones transitorias y contingencias de ejecución.</td></tr>
+          <tr><td>93</td><td>Administración financiera y tributaria.</td></tr>
+          <tr><td>931</td><td>Política económica y fiscal.</td></tr>
+          <tr><td>932</td><td>Gestión del sistema tributario.</td></tr>
+          <tr><td>933</td><td>Gestión del patrimonio.</td></tr>
+          <tr><td>934</td><td>Gestión de la deuda y de la tesorería.</td></tr>
+          <tr><td>94</td><td>Transferencias a otras Administraciones Públicas.</td></tr>
+          <tr><td>941</td><td>Transferencias a Comunidades Autónomas.</td></tr>
+          <tr><td>942</td><td>Transferencias a Entidades Locales territoriales.</td></tr>
+          <tr><td>943</td><td>Transferencias a otras Entidades Locales.</td></tr>
+          <tr><td>944</td><td>Transferencias a la Administración General del Estado.</td></tr>
+          <tr><td>0</td><td><strong>DEUDA PÚBLICA.</strong></td></tr>
+          <tr><td>01</td><td>Deuda Pública.</td></tr>
+          <tr><td>011</td><td>Deuda Pública.</td></tr>
+        </tbody>
+      </table>
+    </tbody>
+  </table>
+
+
+
+  <div id="overlay">
+    <img id="overlayImage" alt="Plot image" />
+  </div>
+  <div id="subSelection">
+    <p>Seleccione subcategoría:</p>
+    <div id="subButtons"></div>
   </div>
 
-  <img id="plotImage" alt="Gràfic de despesa" src="" />
-  <!-- Gallery of all available plots -->
-  <div id="gallery"></div>
-  
-  <footer>
-    Fes servir el desplegable per canviar de gràfic. Els fitxers <code>.png</code> han d'estar a la carpeta <code>Barcelona/Eco-func</code>.
-  </footer>
-
   <script>
-    /* ------------------------------------------------------------------
-       CONFIGURACIÓ
-       ------------------------------------------------------------------
-       – La convenció de noms de fitxer és:
-         plot_<SUFIX>_<PREFIX>.png   (p.ex. plot_130_1.png)
-       – PREFIXOS obligatoris: 1‑4 i 6‑9
-       – SUFIXOS: els mateixos que existeixen al vostre conjunt de dades.
-       Afegiu tots els sufixos presents al vostre projecte a l'array `suffixes`
-       ------------------------------------------------------------------ */
-    const prefixes = ["1","2","3","4","6","7","8","9"];
-
-    /*  TODO: afegiu aquí tots els sufixos detectats als vostres fitxers       *
-     *  Exemple: ["130","210","310","490"]                                      */
-    const suffixes = [
-      "130" /* , "210", "310", ... */
-    ];
-    /* ------------------------------------------------------------------ */
-
-    const select = document.getElementById("plotSelect");
-    const img    = document.getElementById("plotImage");
-
-    // Add placeholder option so no image shows until user selects
-    const placeholder = document.createElement("option");
-    placeholder.textContent = "Tria un gràfic...";
-    placeholder.disabled = true;
-    placeholder.selected = true;
-    select.appendChild(placeholder);
-    // Populate dropdown from data.js
-    if (typeof plotFiles !== 'undefined' && plotFiles.length) {
-      plotFiles.forEach(file => {
-        const labelBase = file.replace(/^bcn_ef_plot_/, '').replace(/\.png$/, '');
-        const [suffix, prefix] = labelBase.split('_');
-        const val = `${prefix}_${suffix}`;
-        const opt = document.createElement('option');
-        opt.value = file;
-        opt.textContent = val;
-        select.appendChild(opt);
+    // Initialize overlay elements and hide on click
+    var overlay = document.getElementById('overlay');
+    var overlayImg = document.getElementById('overlayImage');
+    overlay.addEventListener('click', function() {
+      overlay.classList.remove('show');
+      overlay.style.display = 'none';
+    });
+    
+    // Subcategory selection setup
+    var subCategories = [1,2,3,4,6,7,8,9];
+    var currentCode = '';
+    var subSelection = document.getElementById('subSelection');
+    var subButtons = document.getElementById('subButtons');
+    subCategories.forEach(function(sub) {
+      var btn = document.createElement('button');
+      btn.textContent = sub;
+      btn.setAttribute('data-sub', sub);
+      btn.addEventListener('click', function() {
+        var subCat = this.getAttribute('data-sub');
+        overlayImg.src = 'Barcelona/Eco-func/bcn_ef_plot_' + currentCode + '_' + subCat + '.png';
+        overlayImg.alt = 'Plot for ' + currentCode + ' sub ' + subCat;
+        subSelection.style.display = 'none';
+        overlay.style.display = 'flex';
+        setTimeout(function() {
+          overlay.classList.add('show');
+        }, 10);
       });
-    }
-
-
-    /* Funció per actualitzar la imatge mostrada */
-    function updateImage(){
-      const file = select.value;
-      if (!file) return;
-      img.src = `Barcelona/Eco-func/${file}`;
-      const labelBase = file.replace(/^bcn_ef_plot_/, '').replace(/\.png$/, '');
-      const [suffix, prefix] = labelBase.split('_');
-      img.alt = `Gràfic ${prefix}_${suffix}`;
-      img.style.display = 'block';
-    }
-
-    /* Actualitza la imatge quan canvia la selecció */
-    select.addEventListener("change", updateImage);
-
-    // Open dropdown when the label is clicked
-    const label = document.querySelector('label[for="plotSelect"]');
-    label.addEventListener("click", () => {
-      select.focus();
-      select.click();
+      subButtons.appendChild(btn);
     });
 
-    /* Build gallery grid from data.js */
-    const gallery = document.getElementById('gallery');
-    const ul = document.createElement('ul');
-    gallery.appendChild(ul);
-    if (typeof plotFiles !== 'undefined' && plotFiles.length) {
-      plotFiles.forEach(file => {
-        const labelBase = file.replace(/^bcn_ef_plot_/, '').replace(/\.png$/, '');
-        const [suffix, prefix] = labelBase.split('_');
-        const display = `${prefix}_${suffix}`;
-        const li = document.createElement('li');
-        const a = document.createElement('a');
-        a.href = '#';
-        a.textContent = display;
-        a.onclick = (e) => {
-          e.preventDefault();
-          img.src = `Barcelona/Eco-func/${file}`;
-          img.alt = `Gràfic ${display}`;
-          img.style.display = 'block';
-          select.value = file;
-        };
-        li.appendChild(a);
-        ul.appendChild(li);
+    // Attach click handler to each row in the classified table
+    document.querySelectorAll('#classified tr').forEach(function(tr) {
+      var code = tr.cells[0].textContent.trim();
+      tr.classList.add('level-' + code.length);
+      tr.style.cursor = 'pointer';
+      tr.addEventListener('click', function(event) {
+        currentCode = code;
+        subSelection.style.display = 'block';
       });
-    }
+    });
   </script>
 </body>
 </html>
