@@ -51,9 +51,32 @@
       transform: scale(0);
       transition: transform 0.3s ease;
     }
+</style>
     #overlay.show img {
       transform: scale(1);
     }
+
+    /* Hierarchy styles */
+    .level-1 td {
+      font-family: serif;
+      font-weight: bold;
+      font-size: 1.2em;
+      background-color: #f9f9f9;
+    }
+    .level-2 td {
+      font-family: sans-serif;
+      font-weight: 600;
+      padding-left: 1.5em;
+      font-size: 1em;
+    }
+    .level-3 td {
+      font-family: sans-serif;
+      font-weight: normal;
+      padding-left: 3em;
+      font-size: 0.95em;
+      font-style: italic;
+    }
+  </style>
   </style>
 </head>
 <body>
@@ -320,10 +343,11 @@
 
     // Attach click handler to each row in the classified table
     document.querySelectorAll('#classified tr').forEach(function(tr) {
+      var code = tr.cells[0].textContent.trim();
+      tr.classList.add('level-' + code.length);
       tr.style.cursor = 'pointer';
       tr.addEventListener('click', function(event) {
         var code = tr.cells[0].textContent.trim();
-        tr.classList.add('level-' + code.length);
         var rect = tr.getBoundingClientRect();
         // Set up the overlay image
         overlayImg.src = 'Barcelona/Eco/bcn_e_plot_' + code + '.png';
