@@ -2,89 +2,99 @@
 <html lang="ca">
 <head>
   <meta charset="UTF-8" />
-  <title>Visualitzación de l'evolució de la despesa de les diputacions (2011-2023)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --primary-color: #ffffff;
+      --secondary-color: #000000;
+      --text-color: #000000;
+    }
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      background: #fff;
-      color: #222;
       margin: 0;
-      width: 100vw;
-      height: 100vh;
-      padding: 2rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-    h1 {
-      margin-bottom: 2rem;
-      font-size: 3rem;
-    }
-    h2.subtitle {
-      font-size: 1.5rem;
-      margin-top: 0;
-      margin-bottom: 2rem;
-      color: #555;
-      font-weight: normal;
-    }
-    ul#menu {
-      list-style: none;
       padding: 0;
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 1.5rem;
+      font-family: 'Roboto', sans-serif;
+      color: var(--text-color);
+      background: var(--primary-color);
+      cursor: default;
     }
-    ul#menu li a {
+    main {
       display: flex;
       justify-content: center;
       align-items: center;
-      flex-direction: column;
-      background: #fff;
-      color: #333;
-      text-decoration: none;
-      padding: 1rem 2.5rem;
-      text-align: center;
+      padding: 40px 20px;
+      background: var(--primary-color);
+    }
+    .cards-container {
+      display: flex;
+      gap: 40px;
+      flex-wrap: wrap;
+      justify-content: center;
+      max-width: 100%;
+      width: 100%;
+    }
+    .card {
+      position: relative;
+      flex: 1 1 300px;
+      border: 1px solid var(--secondary-color);
       border-radius: 8px;
-      border: 1px solid #e0e0e0;
+      overflow: hidden;
       box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-      aspect-ratio: 3 / 1;
-      font-size: 2rem;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 1rem;
     }
-    ul#menu li a:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+    .card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.15);
     }
-    ul#menu li a.active {
-      background: #007BFF;
-      color: #fff;
+    .card a {
+      display: block;
+      text-align: center;
+      text-decoration: none;
+      color: var(--secondary-color);
+      background: var(--primary-color);
+      font-family: 'Montserrat', sans-serif;
+      font-size: 1.25em;
+      font-weight: 700;
+    }
+    @media (max-width: 900px) {
+      .cards-container {
+        gap: 30px;
+      }
+      .card {
+        flex: 1 1 280px;
+      }
+    }
+    @media (max-width: 600px) {
+      .cards-container {
+        flex-direction: column;
+        gap: 20px;
+      }
+      .card {
+        width: 100%;
+        max-width: 300px;
+      }
     }
   </style>
 </head>
 <body>
   <h1>Visualitzación de l'evolució de la despesa de les diputacions (2011-2023)</h1>
   <h2 class="subtitle">Selecciona la Diputació</h2>
-  <ul id="menu">
-    <li><a href="#">Albacete</a></li>
-    <li><a href="bcn.html">Barcelona</a></li>
-    <li><a href="#">Cáceres</a></li>
-    <li><a href="#">León</a></li>
-    <li><a href="#">Lugo</a></li>
-    <li><a href="#">Zaragoza</a></li>
-    <li><a href="#">Sevilla</a></li>
-    <li><a href="#">València</a></li>
-  </ul>
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const links = document.querySelectorAll('#menu a');
-      links.forEach(link => {
-        link.addEventListener('click', (e) => {
-          links.forEach(l => l.classList.remove('active'));
-          e.currentTarget.classList.add('active');
-          // Additional interaction logic can go here
-        });
-      });
-    });
-  </script>
+  <main>
+    <div class="cards-container">
+      <div class="card"><a href="#">Albacete</a></div>
+      <div class="card"><a href="bcn.html">Barcelona</a></div>
+      <div class="card"><a href="#">Cáceres</a></div>
+      <div class="card"><a href="#">León</a></div>
+      <div class="card"><a href="#">Lugo</a></div>
+      <div class="card"><a href="#">Zaragoza</a></div>
+      <div class="card"><a href="#">Sevilla</a></div>
+      <div class="card"><a href="#">València</a></div>
+    </div>
+  </main>
 </body>
 </html>
