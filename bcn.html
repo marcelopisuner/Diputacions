@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ca">
 <head>
@@ -17,35 +16,49 @@
     h1 {
       margin-bottom: 1.5rem;
     }
-    ul#menu {
-      list-style: none;
-      padding: 0;
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-      width: 200px;
+    .cards-container {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 30px;
+      padding: 0 2rem;
+      justify-items: start;
     }
-    ul#menu li a {
-      display: block;
-      text-decoration: none;
+    .card {
+      position: relative;
+      width: 100%;
+      max-width: 300px;
+      padding: 2rem;
+      min-height: 250px;
+      border: 1px solid var(--secondary-color, #0056b3);
+      border-radius: 8px;
+      overflow: hidden;
       background: #007BFF;
       color: white;
-      padding: 0.75rem;
       text-align: center;
-      border-radius: 4px;
-      transition: background-color 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
-    ul#menu li a:hover {
+    .card a {
+      text-decoration: none;
+      color: inherit;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .card:hover {
       background: #0056b3;
     }
   </style>
 </head>
 <body>
   <h1>Selecció de territori</h1>
-  <ul id="menu">
-    <li><a href="bcn_e_visu.html">Classificació Economica</a></li>
-    <li><a href="bcn_p_visu.html">Classificació per Programes</a></li>
-    <li><a href="bcn_ef_visu.html">Classificació Econòmico funcional</a></li>
-  </ul>
+  <div class="cards-container">
+    <div class="card"><a href="bcn_e_visu.html">Classificació Economica</a></div>
+    <div class="card"><a href="bcn_p_visu.html">Classificació per Programes</a></div>
+    <div class="card"><a href="bcn_ef_visu.html">Classificació Econòmico funcional</a></div>
+  </div>
 </body>
 </html>
