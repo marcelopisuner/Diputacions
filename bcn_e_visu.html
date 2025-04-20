@@ -30,6 +30,30 @@
     a:hover {
       text-decoration: underline;
     }
+
+    /* Overlay full-page container */
+    #overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      overflow: auto;
+    }
+    #overlay img {
+      max-width: 90%;
+      max-height: 90%;
+      transform: scale(0);
+      transition: transform 0.3s ease;
+    }
+    #overlay.show img {
+      transform: scale(1);
+    }
   </style>
 </head>
 <body>
@@ -281,22 +305,39 @@
 
 
 
-</div>
-<div id="plotContainer">
-  <img id="plotImage" style="display:none; max-width:100%;" alt="Plot image" />
-</div>
-<script>
-  // When a table row is clicked, load and show the corresponding plot
-  document.querySelectorAll('#classified tr').forEach(function(tr) {
-    tr.style.cursor = 'pointer';
-    tr.addEventListener('click', function() {
-      var code = this.cells[0].textContent.trim();
-      var img = document.getElementById('plotImage');
-      img.src = 'Barcelona/Eco/bcn_e_plot_' + code + '.png';
-      img.alt = 'Plot for ' + code;
-      img.style.display = 'block';
+  <div id="overlay">
+    <img id="overlayImage" alt="Plot image" />
+  </div>
+
+  <script>
+    // Initialize overlay elements and hide on click
+    var overlay = document.getElementById('overlay');
+    var overlayImg = document.getElementById('overlayImage');
+    overlay.addEventListener('click', function() {
+      overlay.classList.remove('show');
+      overlay.style.display = 'none';
     });
-  });
-</script>
+
+    // Attach click handler to each row in the classified table
+    document.querySelectorAll('#classified tr').forEach(function(tr) {
+      tr.style.cursor = 'pointer';
+      tr.addEventListener('click', function(event) {
+        var code = this.cells[0].textContent.trim();
+        var rect = this.getBoundingClientRect();
+        // Set up the overlay image
+        overlayImg.src = 'Barcelona/Eco/bcn_e_plot_' + code + '.png';
+        overlayImg.alt = 'Plot for ' + code;
+        // Compute transform-origin so the image “grows” from the click point
+        overlayImg.style.transformOrigin =
+          ((event.clientX - rect.left) / rect.width * 100) + '% ' +
+          ((event.clientY - rect.top) / rect.height * 100) + '%';
+        // Show overlay and trigger the scale animation
+        overlay.style.display = 'flex';
+        setTimeout(function() {
+          overlay.classList.add('show');
+        }, 10);
+      });
+    });
+  </script>
 </body>
 </html>
