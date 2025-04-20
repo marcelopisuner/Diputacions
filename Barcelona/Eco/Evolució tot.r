@@ -40,7 +40,8 @@ process_file <- function(file_path) {
     mutate(Year = as.numeric(year)) %>%
     pivot_longer(cols = matches("^d\\.c\\.[1-9]$"), 
                  names_to = "Expenditure_Area", 
-                 values_to = "Expenditure")
+                 values_to = "Expenditure") %>% 
+    replace_na(list(Expenditure = 0))
   
   return(df)
 }
@@ -109,7 +110,8 @@ process_file_2digit <- function(file_path) {
       names_to = "Expenditure_Area",
       values_to = "Expenditure"
     ) %>%
-    filter(str_detect(Expenditure_Area, "^d\\.c\\.[1-9][0-9]$"))
+    filter(str_detect(Expenditure_Area, "^d\\.c\\.[1-9][0-9]$")) %>% 
+    replace_na(list(Expenditure = 0))
 }
 
 datasets_2digit <- lapply(file_paths_2digit, process_file_2digit)
@@ -166,7 +168,8 @@ process_file_3digit <- function(file_path) {
       names_to = "Expenditure_Area",
       values_to = "Expenditure"
     ) %>%
-    filter(str_detect(Expenditure_Area, "^d\\.c\\.[1-9][0-9]{2}$"))
+    filter(str_detect(Expenditure_Area, "^d\\.c\\.[1-9][0-9]{2}$")) %>% 
+    replace_na(list(Expenditure = 0))
 }
 
 datasets_3digit <- lapply(file_paths_3digit, process_file_3digit)
