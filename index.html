@@ -42,6 +42,7 @@
       grid-template-columns: repeat(4, 1fr);
       gap: 30px;
       padding: 0 2rem;
+      justify-items: start;
     }
     .card {
       position: relative;
@@ -90,6 +91,10 @@
         width: 100%;
         max-width: 300px;
       }
+    }
+    .cards-container .card:nth-child(4n+3),
+    .cards-container .card:nth-child(4n+4) {
+      justify-self: end;
     }
   </style>
 </head>
