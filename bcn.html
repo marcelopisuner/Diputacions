@@ -2,23 +2,44 @@
 <html lang="ca">
 <head>
   <meta charset="UTF-8" />
-  <title>Selecció de territori</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --primary-color: #ffffff;
+      --secondary-color: #000000;
+      --text-color: #000000;
+    }
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      background: #fafafa;
-      color: #222;
-      margin: 2rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+      margin: 0;
+      padding: 0;
+      font-family: 'Roboto', sans-serif;
+      color: var(--text-color);
+      background: var(--primary-color);
+      cursor: default;
     }
     h1 {
-      margin-bottom: 1.5rem;
+      text-align: center;
+      margin: 1.5rem 0 0.5rem;
+      font-size: 2.5rem;
+    }
+    h2.subtitle {
+      text-align: center;
+      margin: 0 0 2rem;
+      font-size: 1.5rem;
+      color: #555;
+      font-weight: normal;
+    }
+    main {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 40px 20px;
+      background: var(--primary-color);
     }
     .cards-container {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
       gap: 30px;
       padding: 0 2rem;
       justify-items: start;
@@ -29,36 +50,63 @@
       max-width: 300px;
       padding: 2rem;
       min-height: 250px;
-      border: 1px solid var(--secondary-color, #0056b3);
+      border: 1px solid var(--secondary-color);
       border-radius: 8px;
       overflow: hidden;
-      background: #007BFF;
-      color: white;
-      text-align: center;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: pointer;
       display: flex;
-      align-items: center;
       justify-content: center;
-    }
-    .card a {
-      text-decoration: none;
-      color: inherit;
-      width: 100%;
-      height: 100%;
-      display: flex;
       align-items: center;
-      justify-content: center;
     }
     .card:hover {
-      background: #0056b3;
+      transform: scale(1.05);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    }
+    .card a {
+      display: block;
+      text-align: center;
+      text-decoration: none;
+      color: var(--secondary-color);
+      background: var(--primary-color);
+      font-family: 'Montserrat', sans-serif;
+      font-size: 1.25em;
+      font-weight: 700;
+    }
+    @media (max-width: 900px) {
+      .cards-container {
+        gap: 30px;
+      }
+      .card {
+        flex: 1 1 280px;
+      }
+    }
+    @media (max-width: 600px) {
+      .cards-container {
+        flex-direction: column;
+        gap: 20px;
+      }
+      .card {
+        width: 100%;
+        max-width: 300px;
+      }
+    }
+    .cards-container .card:nth-child(4n+3),
+    .cards-container .card:nth-child(4n+4) {
+      justify-self: end;
     }
   </style>
 </head>
 <body>
   <h1>Selecció de territori</h1>
-  <div class="cards-container">
-    <div class="card"><a href="bcn_e_visu.html">Classificació Economica</a></div>
-    <div class="card"><a href="bcn_p_visu.html">Classificació per Programes</a></div>
-    <div class="card"><a href="bcn_ef_visu.html">Classificació Econòmico funcional</a></div>
-  </div>
+  <h2 class="subtitle">Selecciona el territori</h2>
+  <main>
+    <div class="cards-container">
+      <div class="card"><a href="bcn_e_visu.html">Classificació Economica</a></div>
+      <div class="card"><a href="bcn_p_visu.html">Classificació per Programes</a></div>
+      <div class="card"><a href="bcn_ef_visu.html">Classificació Econòmico funcional</a></div>
+    </div>
+  </main>
 </body>
 </html>
