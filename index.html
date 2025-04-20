@@ -36,11 +36,12 @@
       align-items: center;
       padding: 40px 20px;
       background: var(--primary-color);
+      overflow-x: auto;
     }
     .cards-container {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      grid-template-rows: repeat(4, minmax(250px, auto));
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
       gap: 30px;
       padding: 0 2rem;
     }
@@ -92,14 +93,6 @@
         max-width: 300px;
       }
     }
-    .card:nth-child(1) { grid-column: 1; grid-row: 1; }
-    .card:nth-child(2) { grid-column: 2; grid-row: 1; }
-    .card:nth-child(3) { grid-column: 1; grid-row: 2; }
-    .card:nth-child(4) { grid-column: 2; grid-row: 2; }
-    .card:nth-child(5) { grid-column: 1; grid-row: 3; }
-    .card:nth-child(6) { grid-column: 2; grid-row: 3; }
-    .card:nth-child(7) { grid-column: 1; grid-row: 4; }
-    .card:nth-child(8) { grid-column: 2; grid-row: 4; }
   </style>
 </head>
 <body>
@@ -117,5 +110,17 @@
       <div class="card"><a href="#">València</a></div>
     </div>
   </main>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const container = document.querySelector('.cards-container');
+      const cards = container.querySelectorAll('.card');
+      const gap = 30; // matches CSS gap
+      if (cards.length > 0) {
+        const cardWidth = cards[0].getBoundingClientRect().width;
+        const totalWidth = cards.length * cardWidth + (cards.length - 1) * gap;
+        container.style.width = totalWidth + 'px';
+      }
+    });
+  </script>
 </body>
 </html>
