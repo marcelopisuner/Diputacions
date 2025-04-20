@@ -18,6 +18,18 @@
       background: var(--primary-color);
       cursor: default;
     }
+    h1 {
+      text-align: center;
+      margin: 1.5rem 0 0.5rem;
+      font-size: 2.5rem;
+    }
+    h2.subtitle {
+      text-align: center;
+      margin: 0 0 2rem;
+      font-size: 1.5rem;
+      color: #555;
+      font-weight: normal;
+    }
     main {
       display: flex;
       justify-content: center;
@@ -26,16 +38,17 @@
       background: var(--primary-color);
     }
     .cards-container {
-      display: flex;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
       gap: 40px;
-      flex-wrap: wrap;
-      justify-content: center;
-      max-width: 100%;
-      width: 100%;
+      max-width: 1000px;
+      margin: 0 auto;
     }
     .card {
       position: relative;
-      flex: 1 1 300px;
+      width: 100%;
+      padding: 2rem;
+      min-height: 200px;
       border: 1px solid var(--secondary-color);
       border-radius: 8px;
       overflow: hidden;
@@ -45,7 +58,6 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      padding: 1rem;
     }
     .card:hover {
       transform: scale(1.05);
