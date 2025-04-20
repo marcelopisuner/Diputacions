@@ -16,7 +16,7 @@ library(scales)
 
 
 ####Para guardar las visualizaciones
-setwd('/Users/marceloppisuner/Documents/b) Trabajo/Fundació Pi i Sunyer/1.Diputacions/Nivell individual/Económica')
+setwd('/Users/marceloppisuner/Documents/GitHub/Diputacions/Barcelona/Eco')
 
 
 
@@ -85,7 +85,7 @@ for(var in unique_vars) {
     )
   
   # Save the plot with a file name based on the Expenditure_Area
-  ggsave(filename = paste0("plot_", var, ".png"), plot = p, width = 8, height = 6)
+  ggsave(filename = paste0("bcn_e_plot_", str_extract(var, "\\d+$"), ".png"), plot = p, width = 8, height = 6)
 }
 
 
@@ -140,7 +140,7 @@ for (var in unique_vars_2digit) {
       legend.position = "none",
       plot.margin = margin(1, 1, 1, 1, "cm")
     )
-  ggsave(filename = paste0("plot_", var, ".png"), plot = p, width = 8, height = 6)
+  ggsave(filename = paste0("bcn_e_plot_", str_extract(var, "\\d+$"), ".png"), plot = p, width = 8, height = 6)
 }
 
 
@@ -197,5 +197,15 @@ for (var in unique_vars_3digit) {
       legend.position = "none",
       plot.margin = margin(1, 1, 1, 1, "cm")
     )
-  ggsave(filename = paste0("plot_", var, ".png"), plot = p, width = 8, height = 6)
+  ggsave(filename = paste0("bcn_e_plot_", str_extract(var, "\\d+$"), ".png"), plot = p, width = 8, height = 6)
 }
+
+# Generate data.js with list of all plot PNG filenames
+png_files <- list.files(path = ".", pattern = "^plot_.*\\.png$")
+js_lines <- c(
+  "const images = [",
+  paste0("  '", png_files, "'", collapse = ",\n"),
+  "];",
+  "export default images;"
+)
+writeLines(js_lines, "data.js")
