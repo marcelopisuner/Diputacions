@@ -281,5 +281,22 @@
 
 
 
+</div>
+<div id="plotContainer">
+  <img id="plotImage" style="display:none; max-width:100%;" alt="Plot image" />
+</div>
+<script>
+  // When a table row is clicked, load and show the corresponding plot
+  document.querySelectorAll('#classified tr').forEach(function(tr) {
+    tr.style.cursor = 'pointer';
+    tr.addEventListener('click', function() {
+      var code = this.cells[0].textContent.trim();
+      var img = document.getElementById('plotImage');
+      img.src = 'Eco/bcn_e_plot_' + code + '.png';
+      img.alt = 'Plot for ' + code;
+      img.style.display = 'block';
+    });
+  });
+</script>
 </body>
 </html>
