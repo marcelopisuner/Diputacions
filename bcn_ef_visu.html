@@ -327,7 +327,7 @@
     var subButtons = document.getElementById('subButtons');
     subCategories.forEach(function(sub) {
       var btn = document.createElement('button');
-      btn.textContent = sub;
+      btn.textContent = subLabels[sub];
       btn.setAttribute('data-sub', sub);
       btn.addEventListener('click', function() {
         var subCat = this.getAttribute('data-sub');
@@ -348,10 +348,22 @@
       tr.classList.add('level-' + code.length);
       tr.style.cursor = 'pointer';
       tr.addEventListener('click', function(event) {
+        event.stopPropagation();
         currentCode = code;
         subSelection.style.display = 'block';
       });
     });
+  // Prevent clicks inside the subcategory panel from closing it
+  subSelection.addEventListener('click', function(event) {
+    event.stopPropagation();
+  });
+  
+  // Hide subSelection when clicking outside of it
+  document.addEventListener('click', function() {
+    if (subSelection.style.display === 'block') {
+      subSelection.style.display = 'none';
+    }
+  });
   </script>
 </body>
 </html>
