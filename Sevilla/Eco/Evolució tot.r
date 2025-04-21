@@ -16,7 +16,7 @@ library(scales)
 
 
 ####Para guardar las visualizaciones
-setwd('/Users/marceloppisuner/Documents/GitHub/Diputacions/Barcelona/Eco')
+setwd('/Users/marceloppisuner/Documents/GitHub/Diputacions/Sevilla/Eco')
 
 
 
@@ -53,9 +53,9 @@ datasets <- lapply(file_paths, process_file)
 merged_data <- bind_rows(datasets)
 
 # Focus on the specific 'codente' value
-data_subset <- merged_data %>% filter(codente == "08000DD000")
+data_subset <- merged_data %>% filter(codente == "41000DD000")
 
-# Create graphs for each Expenditure_Area for codente 08000DD000
+# Create graphs for each Expenditure_Area for codente 41000DD000
 unique_vars <- unique(data_subset$Expenditure_Area)
 
 for(var in unique_vars) {
@@ -86,7 +86,7 @@ for(var in unique_vars) {
     )
   
   # Save the plot with a file name based on the Expenditure_Area
-  ggsave(filename = paste0("bcn_e_plot_", str_extract(var, "\\d+$"), ".png"), plot = p, width = 8, height = 6)
+  ggsave(filename = paste0("sev_e_plot_", str_extract(var, "\\d+$"), ".png"), plot = p, width = 8, height = 6)
 }
 
 
@@ -115,7 +115,7 @@ process_file_2digit <- function(file_path) {
 }
 
 datasets_2digit <- lapply(file_paths_2digit, process_file_2digit)
-merged_data_2digit <- bind_rows(datasets_2digit) %>% filter(codente == "08000DD000")
+merged_data_2digit <- bind_rows(datasets_2digit) %>% filter(codente == "41000DD000")
 unique_vars_2digit <- unique(merged_data_2digit$Expenditure_Area)
 
 for (var in unique_vars_2digit) {
@@ -142,7 +142,7 @@ for (var in unique_vars_2digit) {
       legend.position = "none",
       plot.margin = margin(1, 1, 1, 1, "cm")
     )
-  ggsave(filename = paste0("bcn_e_plot_", str_extract(var, "\\d+$"), ".png"), plot = p, width = 8, height = 6)
+  ggsave(filename = paste0("sev_e_plot_", str_extract(var, "\\d+$"), ".png"), plot = p, width = 8, height = 6)
 }
 
 
@@ -173,7 +173,7 @@ process_file_3digit <- function(file_path) {
 }
 
 datasets_3digit <- lapply(file_paths_3digit, process_file_3digit)
-merged_data_3digit <- bind_rows(datasets_3digit) %>% filter(codente == "08000DD000")
+merged_data_3digit <- bind_rows(datasets_3digit) %>% filter(codente == "41000DD000")
 unique_vars_3digit <- unique(merged_data_3digit$Expenditure_Area)
 
 for (var in unique_vars_3digit) {
@@ -200,7 +200,7 @@ for (var in unique_vars_3digit) {
       legend.position = "none",
       plot.margin = margin(1, 1, 1, 1, "cm")
     )
-  ggsave(filename = paste0("bcn_e_plot_", str_extract(var, "\\d+$"), ".png"), plot = p, width = 8, height = 6)
+  ggsave(filename = paste0("sev_e_plot_", str_extract(var, "\\d+$"), ".png"), plot = p, width = 8, height = 6)
 }
 
 # Generate data.js with list of all plot PNG filenames
