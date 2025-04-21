@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Clasificación Económica de Gastos (Filtro Concepto)</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+    
+    :root {
+      --bg-color: #f5f7fa;
+      --card-bg: #ffffff;
+      --primary-color: #4a90e2;
+      --text-color: #333333;
+      --header-bg: #e2e8f0;
+      --hover-bg: #f1f5f9;
+      --border-color: #e2e8f0;
+      --shadow: rgba(0, 0, 0, 0.05);
+    }
+    
+    body {
+      font-family: 'Roboto', sans-serif;
+      background-color: var(--bg-color);
+      margin: 0;
+      padding: 2em;
+      color: var(--text-color);
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background-color: var(--card-bg);
+      padding: 2em;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px var(--shadow);
+    }
+    
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 0.5em;
+      color: black;
+    }
+    
+    p {
+      font-size: 1rem;
+      margin-bottom: 1.5em;
+    }
+    
+    /* Table styling — structure remains unchanged */
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      background-color: var(--card-bg);
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px var(--shadow);
+      margin-bottom: 2em;
+    }
+    
+    thead th {
+      background-color: var(--header-bg);
+      color: var(--text-color);
+      font-weight: 500;
+      padding: 0.75em 1em;
+      text-align: left;
+      border-bottom: 2px solid var(--border-color);
+    }
+    
+    tbody tr {
+      transition: background-color 0.2s ease;
+    }
+    tbody tr:hover {
+      background-color: var(--hover-bg);
+    }
+    
+    tbody td {
+      padding: 0.75em 1em;
+      border-bottom: 1px solid var(--border-color);
+    }
+    
+    a {
+      color: var(--primary-color);
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    
+    /* Overlay styling unchanged */
+    #overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.8);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      overflow: auto;
+    }
+    #overlay img {
+      max-width: 90%;
+      max-height: 90%;
+      transform: scale(0);
+      transition: transform 0.3s ease;
+    }
+    #overlay.show img {
+      transform: scale(1);
+    }
+    
+    /* Preserve your hierarchy levels */
+    .level-1 td {
+      font-family: serif;
+      font-weight: bold;
+      font-size: 1.2em;
+      background-color: #f9f9f9;
+    }
+    .level-2 td {
+      font-family: sans-serif;
+      font-weight: 600;
+      padding-left: 1.5em;
+      font-size: 1em;
+    }
+    .level-3 td {
+      font-family: sans-serif;
+      font-weight: normal;
+      padding-left: 3em;
+      font-size: 0.95em;
+      font-style: italic;
+    }
+    </style>
+</head>
+<body>
+
+  <h1>Clasificació Econòmica de la Despesa</h1>
+  <p style="font-style: italic; color: #555;">Si fas clic sobre qualsevol fila de la taula, podràs veure l’evolució de la despesa econòmica per aquell concepte i accedir a més detalls visuals.</p>
+  <table id="classified">
+    <tbody>
+        <table id="classified">
+            <thead>
+              <tr>
+                <th>Código</th>
+                <th>Denominación</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>1</td><td>GASTOS DE PERSONAL</td></tr>
+              <tr><td>10</td><td>Órganos de gobierno y personal directivo.</td></tr>
+              <tr><td>100</td><td>Retribuciones básicas y otras remuneraciones de los miembros de los órganos de gobierno.</td></tr>
+              <tr><td>101</td><td>Retribuciones básicas y otras remuneraciones del personal directivo.</td></tr>
+              <tr><td>107</td><td>Contribuciones a planes y fondos de pensiones.</td></tr>
+              <tr><td>11</td><td>Personal eventual.</td></tr>
+              <tr><td>110</td><td>Retribuciones básicas y otras remuneraciones de personal eventual.</td></tr>
+              <tr><td>117</td><td>Contribuciones a planes y fondos de pensiones.</td></tr>
+              <tr><td>12</td><td>Personal Funcionario.</td></tr>
+              <tr><td>120</td><td>Retribuciones básicas.</td></tr>
+              <tr><td>121</td><td>Retribuciones complementarias.</td></tr>
+              <tr><td>122</td><td>Retribuciones en especie.</td></tr>
+              <tr><td>124</td><td>Retribuciones de funcionarios en prácticas (mismo desglose que 120).</td></tr>
+              <tr><td>127</td><td>Contribuciones a planes y fondos de pensiones.</td></tr>
+              <tr><td>13</td><td>Personal Laboral.</td></tr>
+              <tr><td>130</td><td>Laboral Fijo.</td></tr>
+              <tr><td>131</td><td>Laboral temporal.</td></tr>
+              <tr><td>132</td><td>Retribuciones en especie.</td></tr>
+              <tr><td>137</td><td>Contribuciones a planes y fondos de pensiones.</td></tr>
+              <tr><td>14</td><td>Otro personal.</td></tr>
+              <tr><td>143</td><td>Otro personal.</td></tr>
+              <tr><td>147</td><td>Contribuciones a planes y fondos de pensiones.</td></tr>
+              <tr><td>15</td><td>Incentivos al rendimiento.</td></tr>
+              <tr><td>150</td><td>Productividad.</td></tr>
+              <tr><td>151</td><td>Gratificaciones.</td></tr>
+              <tr><td>152</td><td>Otros incentivos al rendimiento.</td></tr>
+              <tr><td>153</td><td>Complemento de dedicación especial.</td></tr>
+              <tr><td>16</td><td>Cuotas, prestaciones y gastos sociales a cargo del empleador.</td></tr>
+              <tr><td>160</td><td>Cuotas sociales.</td></tr>
+              <tr><td>161</td><td>Prestaciones sociales.</td></tr>
+              <tr><td>162</td><td>Gastos sociales del personal.</td></tr>
+              <tr><td>164</td><td>Complemento familiar.</td></tr>
+              <tr><td>2</td><td>GASTOS CORRIENTES EN BIENES Y SERVICIOS</td></tr>
+              <tr><td>20</td><td>Arrendamientos y cánones.</td></tr>
+              <tr><td>200</td><td>Arrendamientos de terrenos y bienes naturales.</td></tr>
+              <tr><td>202</td><td>Arrendamientos de edificios y otras construcciones.</td></tr>
+              <tr><td>203</td><td>Arrendamientos de maquinaria, instalaciones y utillaje.</td></tr>
+              <tr><td>204</td><td>Arrendamientos de material de transporte.</td></tr>
+              <tr><td>205</td><td>Arrendamientos de mobiliario y enseres.</td></tr>
+              <tr><td>206</td><td>Arrendamientos de equipos para procesos de información.</td></tr>
+              <tr><td>208</td><td>Arrendamientos de otro inmovilizado material.</td></tr>
+              <tr><td>209</td><td>Cánones.</td></tr>
+              <tr><td>21</td><td>Reparaciones, mantenimiento y conservación.</td></tr>
+              <tr><td>210</td><td>Infraestructuras y bienes naturales.</td></tr>
+              <tr><td>212</td><td>Edificios y otras construcciones.</td></tr>
+              <tr><td>213</td><td>Maquinaria, instalaciones técnicas y utillaje.</td></tr>
+              <tr><td>214</td><td>Elementos de transporte.</td></tr>
+              <tr><td>215</td><td>Mobiliario.</td></tr>
+              <tr><td>216</td><td>Equipos para procesos de información.</td></tr>
+              <tr><td>219</td><td>Otro inmovilizado material.</td></tr>
+              <tr><td>22</td><td>Material, suministros y otros.</td></tr>
+              <tr><td>220</td><td>Material de oficina.</td></tr>
+              <tr><td>221</td><td>Suministros.</td></tr>
+              <tr><td>222</td><td>Comunicaciones.</td></tr>
+              <tr><td>223</td><td>Transportes.</td></tr>
+              <tr><td>224</td><td>Primas de seguros.</td></tr>
+              <tr><td>225</td><td>Tributos.</td></tr>
+              <tr><td>226</td><td>Gastos diversos.</td></tr>
+              <tr><td>227</td><td>Trabajos realizados por otras empresas y profesionales.</td></tr>
+              <tr><td>23</td><td>Indemnizaciones por razón del servicio.</td></tr>
+              <tr><td>230</td><td>Dietas.</td></tr>
+              <tr><td>231</td><td>Locomoción.</td></tr>
+              <tr><td>233</td><td>Otras indemnizaciones.</td></tr>
+              <tr><td>24</td><td>Gastos de publicaciones.</td></tr>
+              <tr><td>240</td><td>Gastos de edición y distribución.</td></tr>
+              <tr><td>25</td><td>Trabajos realizados por administraciones públicas y otras entidades públicas.</td></tr>
+              <tr><td>26</td><td>Trabajos realizados por Instituciones sin fines de lucro.</td></tr>
+              <tr><td>3</td><td>GASTOS FINANCIEROS</td></tr>
+              <tr><td>30</td><td>De Deuda Pública en euros.</td></tr>
+              <tr><td>300</td><td>Intereses.</td></tr>
+              <tr><td>301</td><td>Gastos de emisión, modificación y cancelación.</td></tr>
+              <tr><td>309</td><td>Otros gastos financieros de Deuda Pública en euros.</td></tr>
+              <tr><td>31</td><td>De préstamos y otras operaciones financieras en euros.</td></tr>
+              <tr><td>310</td><td>Intereses.</td></tr>
+              <tr><td>311</td><td>Gastos de formalización, modificación y cancelación.</td></tr>
+              <tr><td>319</td><td>Otros gastos financieros de préstamos y otras operaciones financieras en euros.</td></tr>
+              <tr><td>32</td><td>De deuda pública en moneda distinta del euro.</td></tr>
+              <tr><td>320</td><td>Intereses.</td></tr>
+              <tr><td>321</td><td>Gastos de emisión, modificación y cancelación.</td></tr>
+              <tr><td>322</td><td>Diferencias de cambio.</td></tr>
+              <tr><td>329</td><td>Otros gastos financieros de Deuda Pública en moneda distinta del euro.</td></tr>
+              <tr><td>33</td><td>De préstamos y otras operaciones financieras en moneda distinta del euro.</td></tr>
+              <tr><td>330</td><td>Intereses.</td></tr>
+              <tr><td>331</td><td>Gastos de formalización, modificación y cancelación.</td></tr>
+              <tr><td>332</td><td>Diferencias de cambio.</td></tr>
+              <tr><td>339</td><td>Otros gastos financieros de préstamos y otras operaciones financieras en moneda distinta del euro.</td></tr>
+              <tr><td>34</td><td>De depósitos, fianzas y otros.</td></tr>
+              <tr><td>340</td><td>Intereses de depósitos.</td></tr>
+              <tr><td>341</td><td>Intereses de fianzas.</td></tr>
+              <tr><td>35</td><td>Intereses de demora y otros gastos financieros.</td></tr>
+              <tr><td>352</td><td>Intereses de demora.</td></tr>
+              <tr><td>353</td><td>Operaciones de intercambio financiero.</td></tr>
+              <tr><td>357</td><td>Ejecución de avales.</td></tr>
+              <tr><td>358</td><td>Intereses por operaciones de arrendamiento financiero («leasing»).</td></tr>
+              <tr><td>359</td><td>Otros gastos financieros.</td></tr>
+              <tr><td>4</td><td>TRANSFERENCIAS CORRIENTES</td></tr>
+              <tr><td>40</td><td>A la Administración General de la Entidad Local.</td></tr>
+              <tr><td>41</td><td>A Organismos Autónomos de la Entidad Local.</td></tr>
+              <tr><td>42</td><td>A la Administración del Estado.</td></tr>
+              <tr><td>420</td><td>A la Administración General del Estado.</td></tr>
+              <tr><td>421</td><td>A Organismos Autónomos y Agencias estatales.</td></tr>
+              <tr><td>422</td><td>A Fundaciones estatales.</td></tr>
+              <tr><td>423</td><td>A sociedades mercantiles estatales, entidades públicas empresariales y otros organismos públicos.</td></tr>
+              <tr><td>43</td><td>A la Seguridad Social.</td></tr>
+              <tr><td>44</td><td>A entes públicos y sociedades mercantiles de la Entidad Local.</td></tr>
+              <tr><td>440</td><td>Subvenciones para fomento del empleo.</td></tr>
+              <tr><td>441</td><td>Subvenciones para bonificación de intereses y primas de seguros.</td></tr>
+              <tr><td>442</td><td>Subvenciones para reducir el precio a pagar por los consumidores.</td></tr>
+              <tr><td>449</td><td>Otras subvenciones a entes públicos y sociedades mercantiles de la Entidad Local.</td></tr>
+              <tr><td>45</td><td>A Comunidades Autónomas.</td></tr>
+              <tr><td>450</td><td>A la Administración General de las Comunidades Autónomas.</td></tr>
+              <tr><td>451</td><td>A Organismos Autónomos y agencias de las Comunidades Autónomas.</td></tr>
+              <tr><td>452</td><td>A fundaciones de las Comunidades Autónomas.</td></tr>
+              <tr><td>453</td><td>A sociedades mercantiles, entidades públicas empresariales y otros organismos públicos dependientes de las Comunidades Autónomas.</td></tr>
+              <tr><td>46</td><td>A Entidades Locales.</td></tr>
+              <tr><td>461</td><td>A Diputaciones, Consejos o Cabildos insulares.</td></tr>
+              <tr><td>462</td><td>A Ayuntamientos.</td></tr>
+              <tr><td>463</td><td>A Mancomunidades.</td></tr>
+              <tr><td>464</td><td>A Áreas Metropolitanas.</td></tr>
+              <tr><td>465</td><td>A Comarcas.</td></tr>
+              <tr><td>466</td><td>A otras Entidades que agrupen municipios.</td></tr>
+              <tr><td>467</td><td>A Consorcios.</td></tr>
+              <tr><td>468</td><td>A Entidades Locales Menores.</td></tr>
+              <tr><td>47</td><td>A Empresas privadas.</td></tr>
+              <tr><td>470</td><td>Subvenciones para fomento del empleo.</td></tr>
+              <tr><td>471</td><td>Subvenciones para bonificación de intereses y primas de seguros.</td></tr>
+              <tr><td>472</td><td>Subvenciones para reducir el precio a pagar por los consumidores.</td></tr>
+              <tr><td>479</td><td>Otras subvenciones a Empresas privadas.</td></tr>
+              <tr><td>48</td><td>A Familias e Instituciones sin fines de lucro.</td></tr>
+              <tr><td>49</td><td>Al exterior.</td></tr>
+              <tr><td>5</td><td>FONDO DE CONTINGENCIA Y OTROS IMPREVISTOS</td></tr>
+              <tr><td>50</td><td>Dotación al Fondo de Contingencia de Ejecución Presupuestaria.</td></tr>
+              <tr><td>500</td><td>Fondo de Contingencia de Ejecución Presupuestaria. Artículo 31 Ley Orgánica 2/2012, de Estabilidad Presupuestaria y Sostenibilidad Financiera.</td></tr>
+              <tr><td>6</td><td>INVERSIONES REALES</td></tr>
+              <tr><td>60</td><td>Inversión nueva en infraestructuras y bienes destinados al uso general.</td></tr>
+              <tr><td>600</td><td>Inversiones en terrenos.</td></tr>
+              <tr><td>609</td><td>Otras inversiones nuevas en infraestructuras y bienes destinados al uso general.</td></tr>
+              <tr><td>61</td><td>Inversiones de reposición de infraestructuras y bienes destinados al uso general.</td></tr>
+              <tr><td>610</td><td>Inversiones en terrenos.</td></tr>
+              <tr><td>619</td><td>Otras inversiones de reposición en infraestructuras y bienes destinados al uso general.</td></tr>
+              <tr><td>62</td><td>Inversión nueva asociada al funcionamiento operativo de los servicios.</td></tr>
+              <tr><td>621</td><td>Terrenos y bienes naturales.</td></tr>
+              <tr><td>622</td><td>Edificios y otras construcciones.</td></tr>
+              <tr><td>623</td><td>Maquinaria, instalaciones técnicas y utillaje.</td></tr>
+              <tr><td>624</td><td>Elementos de transporte.</td></tr>
+              <tr><td>625</td><td>Mobiliario.</td></tr>
+              <tr><td>626</td><td>Equipos para procesos de información.</td></tr>
+              <tr><td>627</td><td>Proyectos complejos.</td></tr>
+              <tr><td>629</td><td>Otras inversiones nuevas asociadas al funcionamiento operativo de los servicios.</td></tr>
+              <tr><td>63</td><td>Inversión de reposición asociada al funcionamiento operativo de los servicios.</td></tr>
+              <tr><td>631</td><td>Terrenos y bienes naturales.</td></tr>
+              <tr><td>632</td><td>Edificios y otras construcciones.</td></tr>
+              <tr><td>633</td><td>Maquinaria, instalaciones técnicas y utillaje.</td></tr>
+              <tr><td>634</td><td>Elementos de transporte.</td></tr>
+              <tr><td>635</td><td>Mobiliario.</td></tr>
+              <tr><td>636</td><td>Equipos para procesos de información.</td></tr>
+              <tr><td>637</td><td>Proyectos complejos.</td></tr>
+              <tr><td>639</td><td>Otras inversiones de reposición asociadas al funcionamiento operativo de los servicios.</td></tr>
+              <tr><td>64</td><td>Gastos en inversiones de carácter inmaterial.</td></tr>
+              <tr><td>640</td><td>Gastos en inversiones de carácter inmaterial.</td></tr>
+              <tr><td>641</td><td>Gastos en aplicaciones informáticas.</td></tr>
+              <tr><td>648</td><td>Cuotas netas de intereses por operaciones de arrendamiento financiero («leasing»).</td></tr>
+              <tr><td>65</td><td>Inversiones gestionadas para otros entes públicos.</td></tr>
+              <tr><td>650</td><td>Gastos en inversiones gestionadas para otros entes públicos.</td></tr>
+              <tr><td>68</td><td>Gastos en inversiones de bienes patrimoniales.</td></tr>
+              <tr><td>681</td><td>Terrenos y bienes naturales.</td></tr>
+              <tr><td>682</td><td>Edificios y otras construcciones.</td></tr>
+              <tr><td>689</td><td>Otros gastos en inversiones de bienes patrimoniales.</td></tr>
+              <tr><td>69</td><td>Inversiones en bienes comunales.</td></tr>
+              <tr><td>690</td><td>Terrenos y bienes naturales.</td></tr>
+              <tr><td>692</td><td>Inversión en infraestructuras.</td></tr>
+              <tr><td>7</td><td>TRANSFERENCIAS DE CAPITAL</td></tr>
+              <tr><td>70</td><td>A la Administración General de la Entidad Local.</td></tr>
+              <tr><td>71</td><td>A Organismos Autónomos de la Entidad Local.</td></tr>
+              <tr><td>72</td><td>A la Administración del Estado.</td></tr>
+              <tr><td>720</td><td>A la Administración General del Estado.</td></tr>
+              <tr><td>721</td><td>A Organismos Autónomos y agencias.</td></tr>
+              <tr><td>722</td><td>A fundaciones estatales.</td></tr>
+              <tr><td>723</td><td>A sociedades mercantiles estatales, entidades públicas empresariales y otros organismos públicos.</td></tr>
+              <tr><td>73</td><td>A la Seguridad Social.</td></tr>
+              <tr><td>74</td><td>A entes públicos y sociedades mercantiles de la Entidad local.</td></tr>
+              <tr><td>75</td><td>A Comunidades Autónomas.</td></tr>
+              <tr><td>750</td><td>A la Administración General de las Comunidades Autónomas.</td></tr>
+              <tr><td>751</td><td>A Organismos Autónomos y agencias de las Comunidades Autónomas.</td></tr>
+              <tr><td>752</td><td>A fundaciones de las Comunidades Autónomas.</td></tr>
+              <tr><td>753</td><td>A sociedades mercantiles, entidades públicas empresariales y otros organismos públicos dependientes de las Comunidades Autónomas.</td></tr>
+              <tr><td>76</td><td>A Entidades Locales.</td></tr>
+              <tr><td>761</td><td>A Diputaciones, Consejos o Cabildos.</td></tr>
+              <tr><td>762</td><td>A Ayuntamientos.</td></tr>
+              <tr><td>763</td><td>A Mancomunidades.</td></tr>
+              <tr><td>764</td><td>A Áreas Metropolitanas.</td></tr>
+              <tr><td>765</td><td>A Comarcas.</td></tr>
+              <tr><td>766</td><td>A Entidades que agrupen Municipios.</td></tr>
+              <tr><td>767</td><td>A Consorcios.</td></tr>
+              <tr><td>768</td><td>A Entidades Locales Menores.</td></tr>
+              <tr><td>77</td><td>A empresas privadas.</td></tr>
+              <tr><td>78</td><td>A familias e instituciones sin fines de lucro.</td></tr>
+              <tr><td>79</td><td>Al exterior.</td></tr>
+              <tr><td>8</td><td>ACTIVOS FINANCIEROS</td></tr>
+              <tr><td>80</td><td>Adquisición de deuda del sector público.</td></tr>
+              <tr><td>800</td><td>Adquisición de deuda del sector público a corto plazo.</td></tr>
+              <tr><td>801</td><td>Adquisición de deuda del sector público a largo plazo.</td></tr>
+              <tr><td>81</td><td>Adquisición de Obligaciones y Bonos fuera del sector público.</td></tr>
+              <tr><td>810</td><td>Adquisición de obligaciones y bonos fuera del sector público a corto plazo.</td></tr>
+              <tr><td>811</td><td>Adquisición de obligaciones y bonos fuera del sector público a largo plazo.</td></tr>
+              <tr><td>82</td><td>Concesión préstamos al sector público.</td></tr>
+              <tr><td>820</td><td>Préstamos a corto plazo.</td></tr>
+              <tr><td>821</td><td>Préstamos a largo plazo.</td></tr>
+              <tr><td>83</td><td>Concesión de préstamos fuera del sector público.</td></tr>
+              <tr><td>830</td><td>Préstamos a corto plazo.</td></tr>
+              <tr><td>831</td><td>Préstamos a largo plazo.</td></tr>
+              <tr><td>84</td><td>Constitución de depósitos y fianzas.</td></tr>
+              <tr><td>840</td><td>Depósitos.</td></tr>
+              <tr><td>841</td><td>Fianzas.</td></tr>
+              <tr><td>85</td><td>Adquisición de acciones y participaciones del sector público.</td></tr>
+              <tr><td>850</td><td>Adquisición de acciones y participaciones del sector público.</td></tr>
+              <tr><td>86</td><td>Adquisición de acciones y participaciones fuera del sector público.</td></tr>
+              <tr><td>860</td><td>Adquisición de acciones y participaciones fuera del sector público.</td></tr>
+              <tr><td>87</td><td>Aportaciones patrimoniales.</td></tr>
+              <tr><td>870</td><td>Aportaciones a fundaciones.</td></tr>
+              <tr><td>871</td><td>Aportaciones a consorcios.</td></tr>
+              <tr><td>872</td><td>Aportaciones a otros entes.</td></tr>
+              <tr><td>9</td><td>PASIVOS FINANCIEROS</td></tr>
+              <tr><td>90</td><td>Amortización de Deuda Pública en euros.</td></tr>
+              <tr><td>900</td><td>Amortización de Deuda Pública en euros a corto plazo.</td></tr>
+              <tr><td>901</td><td>Amortización de Deuda Pública en euros a largo plazo.</td></tr>
+              <tr><td>91</td><td>Amortización de préstamos y de operaciones en euros.</td></tr>
+              <tr><td>910</td><td>Amortización de préstamos a corto plazo de entes del sector público.</td></tr>
+              <tr><td>911</td><td>Amortización de préstamos a largo plazo de entes del sector público.</td></tr>
+              <tr><td>912</td><td>Amortización de préstamos a corto plazo de entes de fuera del sector Público.</td></tr>
+              <tr><td>913</td><td>Amortización de préstamos a largo plazo de entes de fuera del sector público.</td></tr>
+              <tr><td>92</td><td>Amortización de Deuda Pública en moneda distinta del euro.</td></tr>
+              <tr><td>920</td><td>Amortización de Deuda Pública en moneda distinta del euro a corto plazo.</td></tr>
+              <tr><td>921</td><td>Amortización de Deuda Pública en moneda distinta del euro a largo plazo.</td></tr>
+              <tr><td>93</td><td>Amortización de préstamos en moneda distinta del euro.</td></tr>
+              <tr><td>930</td><td>Amortización de préstamos en moneda distinta del euro a corto plazo.</td></tr>
+              <tr><td>931</td><td>Amortización de préstamos en moneda distinta del euro a largo plazo.</td></tr>
+              <tr><td>94</td><td>Devolución de depósitos y fianzas.</td></tr>
+              <tr><td>940</td><td>Devolución de depósitos.</td></tr>
+              <tr><td>941</td><td>Devolución de fianzas.</td></tr>
+            </tbody>
+          </table>
+    </tbody>
+  </table>
+
+
+
+  <div id="overlay">
+    <img id="overlayImage" alt="Plot image" />
+  </div>
+
+  <script>
+    // Initialize overlay elements and hide on click
+    var overlay = document.getElementById('overlay');
+    var overlayImg = document.getElementById('overlayImage');
+    overlay.addEventListener('click', function() {
+      overlay.classList.remove('show');
+      overlay.style.display = 'none';
+    });
+
+    // Attach click handler to each row in the classified table
+    document.querySelectorAll('#classified tr').forEach(function(tr) {
+      var code = tr.cells[0].textContent.trim();
+      tr.classList.add('level-' + code.length);
+      tr.style.cursor = 'pointer';
+      tr.addEventListener('click', function(event) {
+        var code = tr.cells[0].textContent.trim();
+        var rect = tr.getBoundingClientRect();
+        // Set up the overlay image
+        overlayImg.src = 'Barcelona/Eco/bcn_e_plot_' + code + '.png';
+        overlayImg.alt = 'Plot for ' + code;
+        // Compute transform-origin so the image “grows” from the click point
+        overlayImg.style.transformOrigin =
+          ((event.clientX - rect.left) / rect.width * 100) + '% ' +
+          ((event.clientY - rect.top) / rect.height * 100) + '%';
+        // Show overlay and trigger the scale animation
+        overlay.style.display = 'flex';
+        setTimeout(function() {
+          overlay.classList.add('show');
+        }, 10);
+      });
+    });
+  </script>
+</body>
+</html>
