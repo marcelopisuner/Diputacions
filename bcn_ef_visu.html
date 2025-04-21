@@ -350,7 +350,15 @@
       tr.addEventListener('click', function(event) {
         event.stopPropagation();
         currentCode = code;
-        subSelection.style.display = 'block';
+        if (subSelection.style.display === 'block') {
+          // briefly hide then re-show to indicate a refresh
+          subSelection.style.display = 'none';
+          setTimeout(function() {
+            subSelection.style.display = 'block';
+          }, 100);
+        } else {
+          subSelection.style.display = 'block';
+        }
       });
     });
   // Prevent clicks inside the subcategory panel from closing it
