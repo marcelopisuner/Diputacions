@@ -349,14 +349,22 @@
       tr.style.cursor = 'pointer';
       tr.addEventListener('click', function(event) {
         event.stopPropagation();
-        currentCode = code;
+        var clickedCode = code;
+        // If already open for this same row, just hide
+        if (subSelection.style.display === 'block' && currentCode === clickedCode) {
+          subSelection.style.display = 'none';
+          return;
+        }
+        // Otherwise, update to new code
+        currentCode = clickedCode;
         if (subSelection.style.display === 'block') {
-          // briefly hide then re-show to indicate a refresh
+          // clicking a different row: flicker to refresh
           subSelection.style.display = 'none';
           setTimeout(function() {
             subSelection.style.display = 'block';
           }, 100);
         } else {
+          // opening for the first time
           subSelection.style.display = 'block';
         }
       });
