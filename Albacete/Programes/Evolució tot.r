@@ -8,7 +8,7 @@ library(tidyr)
 library(stringr)
 library(scales)
 
-setwd('/Users/marceloppisuner/Documents/GitHub/Diputacions/Barcelona/Programes')
+setwd('/Users/marceloppisuner/Documents/GitHub/Diputacions/Albacete/Programes')
 
 # Define file path
 file_paths <- list.files(path = "/Users/marceloppisuner/Documents/b) Trabajo/Fundació Pi i Sunyer/Dades/3.Dades diputacions/1.Evolució de la despesa/Programes/_Evolució ProgramesTot", 
@@ -39,9 +39,9 @@ datasets <- lapply(file_paths, process_file)
 merged_data <- bind_rows(datasets)
 
 # Focus on the specific 'codente' value
-data_subset <- merged_data %>% filter(codente == "08000DD000")
+data_subset <- merged_data %>% filter(codente == "02000DD000")
 
-# Create graphs for each Expenditure_Area for codente 08000DD000
+# Create graphs for each Expenditure_Area for codente 02000DD000
 unique_vars <- unique(data_subset$Expenditure_Area)
 
 for(var in unique_vars) {
@@ -73,7 +73,7 @@ for(var in unique_vars) {
   
   # Save the plot with a file name based on the Expenditure_Area
   number <- str_extract(var, "\\d{1,3}$")
-  ggsave(filename = paste0("bcn_p_plot_", number, ".png"), plot = p, width = 8, height = 6)
+  ggsave(filename = paste0("alb_p_plot_", number, ".png"), plot = p, width = 8, height = 6)
 }
 
 
@@ -108,7 +108,7 @@ datasets <- lapply(file_paths, process_file)
 merged_data <- bind_rows(datasets)
 
 # Focus on the specific 'codente' value (if necessary)
-data_subset <- merged_data %>% filter(codente == "08000DD000")
+data_subset <- merged_data %>% filter(codente == "02000DD000")
 
 # Create graphs for each variable of interest
 unique_vars <- unique(data_subset$Variable)
@@ -142,5 +142,5 @@ for(var in unique_vars) {
   
   # Save the plot with a file name based on the variable name
   number <- str_extract(var, "\\d{1,3}$")
-  ggsave(filename = paste0("bcn_p_plot_", number, ".png"), plot = p, width = 8, height = 6)
+  ggsave(filename = paste0("alb_p_plot_", number, ".png"), plot = p, width = 8, height = 6)
 }
